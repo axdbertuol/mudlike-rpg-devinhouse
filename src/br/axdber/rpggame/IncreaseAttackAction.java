@@ -1,20 +1,26 @@
 package br.axdber.rpggame;
 
-public class IncreaseAttackAction implements Action{
+import br.axdber.rpggame.interfaces.Action;
 
-    private final int ATK_INCREASE_VALUE = 3;
+public class IncreaseAttackAction implements Action {
+
+    private final int ATK_INCREASE_VALUE = 2;
 
 
+    @SafeVarargs
     @Override
-    public <T extends Character> void act(T... args) {
+    public final <T extends Character> void act(T... args) {
         Character character = args[0];
-        character.setAttackPoints(character.getAttackPoints() + ATK_INCREASE_VALUE);
+        boolean didIncrease = character.increaseTempATP(ATK_INCREASE_VALUE);
+        if (!didIncrease) {
+            System.out.println(character.name + " não pode mais aumentar o ataque!");
+        }
     }
+
+
 
     @Override
     public String toString() {
-        return "IncreaseAttackAction{" +
-                "ATK_INCREASE_VALUE +" + ATK_INCREASE_VALUE +
-                '}';
+        return "Concentrar ATP +" + ATK_INCREASE_VALUE;
     }
 }

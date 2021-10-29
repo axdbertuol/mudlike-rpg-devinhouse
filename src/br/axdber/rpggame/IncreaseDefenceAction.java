@@ -1,20 +1,24 @@
 package br.axdber.rpggame;
 
-public class IncreaseDefenceAction implements Action{
+import br.axdber.rpggame.interfaces.Action;
+
+public class IncreaseDefenceAction implements Action {
 
     private final int DEF_INCREASE_VALUE = 2;
 
 
+    @SafeVarargs
     @Override
-    public <T extends Character> void act(T... args) {
+    public final <T extends Character> void act(T... args) {
         Character character = args[0];
-        character.setDefencePoints(character.getDefencePoints() + DEF_INCREASE_VALUE);
+        boolean didIncrease = character.increaseTempDFP(DEF_INCREASE_VALUE);
+        if (!didIncrease) {
+            System.out.println(character.name + " não pode mais aumentar a defesa!");
+        }
     }
 
     @Override
     public String toString() {
-        return "IncreaseDefenceAction{" +
-                "DEF_INCREASE_VALUE +" + DEF_INCREASE_VALUE +
-                '}';
+        return "Concentrar DFP +" + DEF_INCREASE_VALUE;
     }
 }
