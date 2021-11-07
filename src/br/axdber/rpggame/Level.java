@@ -12,7 +12,7 @@ public class Level {
 
     private final double EXP_INCREASE_RATE;
     private final int FIRST_LVL_EXP = 100;
-    private final int MAX_LVL = 10;
+    private final int MAX_LVL = 9;
 
     private int experience;
     private int value;

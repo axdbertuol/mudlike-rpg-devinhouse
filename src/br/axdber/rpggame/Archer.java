@@ -44,11 +44,13 @@ public class Archer extends CombatClass {
         ArrayList<Action> actions = new ArrayList<>();
         actions.add(new AttackAction());
         actions.add(new IncreaseAttackAction());
-        actions.add(new IncreaseDefenceAction());
-        actions.add(new PoisonAction());
+        actions.add(new BleedingAction());
         actionsAllowedPerLvl.put(0, actions);
         actions = (ArrayList<Action>) actions.clone();
+        actions.add(new PoisonAction());
         actions.add(new DoubleAtkAction());
-        actionsAllowedPerLvl.put(1, actions);
+        for (int i = 1; i < 10 ; i++) {
+            actionsAllowedPerLvl.put(i, actions);
+        }
     }
 }

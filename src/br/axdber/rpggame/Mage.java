@@ -45,11 +45,13 @@ public class Mage extends CombatClass {
         actions.add(new AttackAction());
         actions.add(new BurningAction());
         actions.add(new FreezeAction());
-        actions.add(new IncreaseAttackAction());
         actionsAllowedPerLvl.put(0, actions);
         actions = (ArrayList<Action>) actions.clone();
-        actions.add(new DoubleAtkAction());
-        actionsAllowedPerLvl.put(1, actions);
+        actions.add(new IncreaseAttackAction());
+        actions.add(new PoisonAction());
+        for (int i = 1; i < 10; i++) {
+            actionsAllowedPerLvl.put(i, actions);
+        }
     }
 
 }

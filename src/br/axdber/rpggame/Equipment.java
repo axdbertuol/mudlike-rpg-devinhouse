@@ -9,5 +9,6 @@ public abstract class Equipment {
 
     protected int attackPoints;
     protected int defencePoints;
+    protected int maxHealth;
 
 }

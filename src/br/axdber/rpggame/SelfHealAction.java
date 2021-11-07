@@ -7,7 +7,7 @@ public class SelfHealAction implements Action {
     @Override
     public final <T extends Character> void act(T... args) {
         Character character = args[0];
-        Dice dice = Dice.D10();
+        Dice dice = Dice.D16();
         dice.roll();
         character.increaseHealth(dice.getResult());
         System.out.println("Você se curou " + dice.getResult());

@@ -2,8 +2,8 @@ package br.axdber.rpggame.enums;
 
 public enum StatusType {
 
-    POISONED("Envenenado", 2, 5, 0),
-    BLEEDING("Sangrando", 10, 3, -1),
+    POISONED("Envenenado", 3, 5, 0),
+    BLEEDING("Sangrando", 5, 3, -1),
     BURNED("Queimado", -5, 5, +1),
     FROZEN("Congelado", 0, 5, -1);
 

@@ -41,13 +41,13 @@ public class Battle {
             }
             i++;
 
-        } while (player.stats.getHealth() > 0 && enemy.stats.getHealth() > 0);
+        } while (player.getHealth() > 0 && enemy.getHealth() > 0);
 
         player.resetTempStats();
         player.resetAllStatus();
         enemy.resetTempStats();
         enemy.resetAllStatus();
-        if (player.stats.getHealth() <= 0) {
+        if (player.getHealth() <= 0) {
             winner = enemy;
         } else {
             winner = player;

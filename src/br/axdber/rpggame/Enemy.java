@@ -27,11 +27,12 @@ public class Enemy extends Character implements BattleAble, NonPlayable {
         this.difficultyRate = difficultyType == DifficultyType.EASY ? easyDifficultyRate : hardDifficultyRate;
         // set stats according to difficulty type
         calcStatsByDifficulty();
+        this.setHealthToMax();
     }
 
     @Override
     public void takeTurn(Action chosenAction, Character target) {
-        if (this.stats.getHealth() > 0) {
+        if (this.getHealth() > 0) {
             setBattleAction(chosenAction);
         }
         this.battleAction.act(this, target);
@@ -60,10 +61,10 @@ public class Enemy extends Character implements BattleAble, NonPlayable {
 
     @Override
     public void calcStatsByDifficulty() {
-        this.stats.calculateMaxHealth((int) (Math.ceil(this.stats.getMaxHealth() * difficultyRate)));
-        this.setHealthToMax();
-        this.stats.calculateDefencePoints((int) (Math.ceil(this.stats.getDefencePoints() * difficultyRate)));
-        this.stats.calculateAttackPoints((int) (Math.ceil(this.stats.getAttackPoints() * difficultyRate)));
+        this.characterStats.calculateMaxHealth((int) (Math.ceil(this.characterStats.getMaxHealth() * difficultyRate)));
+        this.characterStats.calculateDefencePoints((int) (Math.ceil(this.characterStats.getDefencePoints() * difficultyRate)));
+        this.characterStats.calculateAttackPoints((int) (Math.ceil(this.characterStats.getAttackPoints() * difficultyRate)));
 
+        updateTotalStats();
     }
 }

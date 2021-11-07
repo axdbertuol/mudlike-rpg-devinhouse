@@ -21,7 +21,7 @@ public class AttackAction implements Action {
             return;
         }
 
-        int damage = dice.getResult() + attacker.stats.getAttackPoints() + attacker.tempStats.getAttackPoints();
+        int damage = dice.getResult() + attacker.getTotalATP();
 
         // Critical
         if (dice.getResult() == 20) {
@@ -33,7 +33,7 @@ public class AttackAction implements Action {
         }
 
         // Defended
-        int totalDefenderDFP = defender.stats.getDefencePoints() + defender.tempStats.getDefencePoints();
+        int totalDefenderDFP = defender.getTotalDFP();
         if (totalDefenderDFP >= damage) {
             System.out.println(attacker.reportAttack(damage, defender.getName()));
             System.out.println(attacker.name + ", seu ataque foi totalmente bloqueado!");

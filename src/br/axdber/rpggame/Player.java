@@ -21,7 +21,7 @@ public class Player extends Character implements BattleAble, Playable {
     @Override
     public void takeTurn(Action chosenAction, Character target) {
         // check if player is dead
-        if (stats.getHealth() > 0) {
+        if (this.getHealth() > 0) {
             this.setBattleAction(chosenAction);
         }
         this.battleAction.act(this, target);

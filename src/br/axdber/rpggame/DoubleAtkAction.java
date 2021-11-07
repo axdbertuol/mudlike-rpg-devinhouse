@@ -36,11 +36,11 @@ public class DoubleAtkAction implements Action {
             results[1] = 0;
         }
 
-        int damage = Arrays.stream(results).sum() + attacker.stats.getAttackPoints() + attacker.tempStats.getAttackPoints();
+        int damage = Arrays.stream(results).sum() + attacker.getTotalATP();
 
 
         // Defended
-       int totalDefenderDFP = defender.stats.getDefencePoints() + defender.tempStats.getDefencePoints();
+       int totalDefenderDFP = defender.getTotalDFP();
         if (totalDefenderDFP >= damage) {
             System.out.println(attacker.reportAttack(damage, defender.getName()));
             System.out.println(attacker.name + ", seu ataque foi totalmente bloqueado!");

@@ -25,21 +25,21 @@ public class Game {
     }
 
     public void generateWeapons() {
-        weaponHashMap.put(WeaponType.BOW.name, new Weapon(3, WeaponType.BOW));
-        weaponHashMap.put(WeaponType.CROSSBOW.name, new Weapon(4, -1, WeaponType.CROSSBOW));
-        weaponHashMap.put(WeaponType.AXE.name, new Weapon(4, -1, WeaponType.AXE));
-        weaponHashMap.put(WeaponType.SWORD.name, new Weapon(2, 1, WeaponType.SWORD));
-        weaponHashMap.put(WeaponType.STAFF.name, new Weapon(2, 1, WeaponType.STAFF));
-        weaponHashMap.put(WeaponType.WAND.name, new Weapon(1, 2, WeaponType.WAND));
-        weaponHashMap.put(WeaponType.HANDS.name, new Weapon(1, WeaponType.HANDS));
+        weaponHashMap.put(WeaponType.BOW.name, new Weapon(WeaponType.BOW));
+        weaponHashMap.put(WeaponType.CROSSBOW.name, new Weapon(WeaponType.CROSSBOW));
+        weaponHashMap.put(WeaponType.AXE.name, new Weapon(WeaponType.AXE));
+        weaponHashMap.put(WeaponType.SWORD.name, new Weapon(WeaponType.SWORD));
+        weaponHashMap.put(WeaponType.STAFF.name, new Weapon(WeaponType.STAFF));
+        weaponHashMap.put(WeaponType.WAND.name, new Weapon(WeaponType.WAND));
+        weaponHashMap.put(WeaponType.HANDS.name, new Weapon(WeaponType.HANDS));
 
     }
 
     public void generateArmors() {
-        armorHashMap.put(ArmorType.LEATHER.name, new Armor(2, 2, ArmorType.LEATHER));
-        armorHashMap.put(ArmorType.MAIL.name, new Armor(3, 0, ArmorType.MAIL));
-        armorHashMap.put(ArmorType.PLATE.name, new Armor(6, -1, ArmorType.PLATE));
-        armorHashMap.put(ArmorType.CLOTH.name, new Armor(1, 3, ArmorType.CLOTH));
+        armorHashMap.put(ArmorType.LEATHER.name, new Armor( ArmorType.LEATHER));
+        armorHashMap.put(ArmorType.MAIL.name, new Armor(ArmorType.MAIL));
+        armorHashMap.put(ArmorType.PLATE.name, new Armor( ArmorType.PLATE));
+        armorHashMap.put(ArmorType.CLOTH.name, new Armor( ArmorType.CLOTH));
     }
 
     public void generateEnemies() {
@@ -57,7 +57,7 @@ public class Game {
                 new Barbarian(),
                 weaponHashMap.get(WeaponType.AXE.name),
                 armorHashMap.get(ArmorType.LEATHER.name),
-                0,
+                1,
                 difficultyType));
         enemyHashMap.put("Líder", new Enemy(
                 "Líder",
@@ -65,9 +65,27 @@ public class Game {
                 new Mage(),
                 weaponHashMap.get(WeaponType.STAFF.name),
                 armorHashMap.get(ArmorType.CLOTH.name),
-                1,
+                2,
                 difficultyType));
 
+    }
+
+    public static int optionsLoop(int[] bounds, String[] msgs, String[] options) {
+        int option = 0;
+        while (option < bounds[0] || option > bounds[1]) {
+            for (String msg : msgs) {
+                System.out.println(msg);
+            }
+            for (String op : options) {
+                System.out.println(op);
+            }
+
+            option = in.nextInt();
+            if (option < bounds[0] || option > bounds[1]) {
+                System.out.println("Opção inválida");
+            }
+        }
+        return option;
     }
 
     public void setTimeout(long timeout) {
@@ -98,87 +116,105 @@ public class Game {
             Armor pickedArmor = null;
             MotivationType motivationType = null;
             int option = 0;
+            System.out.println("Seja bem vindo(a) à BATALHA FINAL!");
 
-            while (option < 1 || option > 3) {
-                System.out.println("Seja bem vindo(a) à BATALHA FINAL!");
-                System.out.println("Escolha do nível de dificuldade:");
-                System.out.println("1. " + DifficultyType.EASY.name);
-                System.out.println("2. " + DifficultyType.NORMAL.name);
-                System.out.println("3. " + DifficultyType.HARD.name);
-                option = in.nextInt();
-                switch (option) {
-                    case 1 -> dificuldade = DifficultyType.EASY;
-                    case 2 -> dificuldade = DifficultyType.NORMAL;
-                    case 3 -> dificuldade = DifficultyType.HARD;
-                    default -> System.out.println("Opção inválida");
-                }
+            // Difficulty
+            String[] optionsString = new String[DifficultyType.values().length];
+            for (DifficultyType dft : DifficultyType.values()) {
+                optionsString[dft.ordinal()] = dft.ordinal() + 1 + ". " + dft.name;
             }
-            game = new Game(dificuldade);
+            option = optionsLoop(
+                    new int[]{1, 3},
+                    new String[]{"Escolha do nível de dificuldade:"},
+                    optionsString
+            );
+            switch (option) {
+                case 1 -> dificuldade = DifficultyType.EASY;
+                case 2 -> dificuldade = DifficultyType.NORMAL;
+                case 3 -> dificuldade = DifficultyType.HARD;
+                default -> System.out.println("Opção inválida");
+            }
 
+            game = new Game(dificuldade);
+            // NAME
             while (name.isEmpty()) {
                 System.out.println("Digite o seu nome");
                 name = in.next();
-
-            }
-            option = 0;
-            while (option < 1 || option > 2) {
-                System.out.println("Escolha o seu sexo");
-                System.out.println("1. " + SexType.MALE.name);
-                System.out.println("2. " + SexType.FEMALE.name);
-
-                option = in.nextInt();
-
-                switch (option) {
-                    case 1 -> sexo = SexType.MALE;
-                    case 2 -> sexo = SexType.FEMALE;
-                    default -> System.out.println("Opção inválida");
-                }
             }
 
-            while (combatClass == null) {
-
-                System.out.println("Escolha uma classe");
-                for (CombatClassType cbt : CombatClassType.values()) {
-                    System.out.println(cbt.ordinal() + 1 + ". " + cbt.name);
-                }
-                option = in.nextInt();
-                switch (option) {
-                    case 1 -> combatClass = new Archer(); // ordinal 0
-                    case 2 -> combatClass = new Barbarian(); // 1
-                    case 3 -> combatClass = new Warrior(); // 2
-                    case 4 -> combatClass = new Mage(); // 3
-                    default -> System.out.println("Opção inválida");
-                }
+            // SEX
+            optionsString = new String[SexType.values().length];
+            for (SexType sex : SexType.values()) {
+                optionsString[sex.ordinal()] = sex.ordinal() + 1 + ". " + sex.name;
             }
-            while (pickedWeapon == null) {
-                System.out.println("Escolha uma arma");
+            option = optionsLoop(
+                    new int[]{1, 2},
+                    new String[]{"Escolha o seu sexo:"},
+                    optionsString
+            );
+            switch (option) {
+                case 1 -> sexo = SexType.MALE;
+                case 2 -> sexo = SexType.FEMALE;
+                default -> System.out.println("Opção inválida");
+            }
 
-                for (int i = 0; i < combatClass.weaponsAllowed.size(); i++) {
-                    System.out.println(i + 1 + ". " + combatClass.weaponsAllowed.get(i).name);
-                }
-                option = in.nextInt();
-
-                switch (option) {
-                    case 1 -> pickedWeapon = game.weaponHashMap.get(combatClass.weaponsAllowed.get(0).name);
-                    case 2 -> pickedWeapon = game.weaponHashMap.get(combatClass.weaponsAllowed.get(1).name);
-                    case 3 -> pickedWeapon = game.weaponHashMap.get(combatClass.weaponsAllowed.get(2).name);
-                    default -> System.out.println("Opção inválida");
+            // CombatClass
+            optionsString = new String[CombatClassType.values().length];
+            for (CombatClassType cbt : CombatClassType.values()) {
+                optionsString[cbt.ordinal()] = cbt.ordinal() + 1 + ". " + cbt.name;
+            }
+            option = optionsLoop(
+                    new int[]{1, 4},
+                    new String[]{"Escolha uma classe:"},
+                    optionsString
+            );
+            switch (option) {
+                case 1 -> combatClass = new Barbarian();
+                case 2 -> combatClass = new Archer();
+                case 3 -> combatClass = new Warrior();
+                case 4 -> combatClass = new Mage();
+                default -> {
                 }
             }
 
-            while (pickedArmor == null) {
-                System.out.println("Escolha uma armadura");
-                for (int i = 0; i < combatClass.armorsAllowed.size(); i++) {
-                    System.out.println(i + 1 + ". " + combatClass.armorsAllowed.get(i).name);
-                }
-                option = in.nextInt();
-
-                switch (option) {
-                    case 1 -> pickedArmor = game.armorHashMap.get(combatClass.armorsAllowed.get(0).name);
-                    case 2 -> pickedArmor = game.armorHashMap.get(combatClass.armorsAllowed.get(1).name);
-                    default -> System.out.println("Opção inválida");
-                }
+            // Weapon
+            assert combatClass != null;
+            optionsString = new String[combatClass.weaponsAllowed.size()];
+            int i = 0;
+            for (WeaponType wp : combatClass.weaponsAllowed) {
+                optionsString[i] = i + 1 + ". " + wp.name;
+                i++;
             }
+            option = optionsLoop(
+                    new int[]{1, 3},
+                    new String[]{"Escolha uma arma:"},
+                    optionsString
+            );
+            switch (option) {
+                case 1 -> pickedWeapon = game.weaponHashMap.get(combatClass.weaponsAllowed.get(0).name);
+                case 2 -> pickedWeapon = game.weaponHashMap.get(combatClass.weaponsAllowed.get(1).name);
+                case 3 -> pickedWeapon = game.weaponHashMap.get(combatClass.weaponsAllowed.get(2).name);
+                default -> System.out.println("Opção inválida");
+            }
+
+            // Armor
+            optionsString = new String[combatClass.armorsAllowed.size()];
+            i = 0;
+            for (ArmorType armor : combatClass.armorsAllowed) {
+                optionsString[i] = i + 1 + ". " + armor.name;
+                i++;
+            }
+            option = optionsLoop(
+                    new int[]{1, 2},
+                    new String[]{"Escolha uma armadura:"},
+                    optionsString
+            );
+            switch (option) {
+                case 1 -> pickedArmor = game.armorHashMap.get(combatClass.armorsAllowed.get(0).name);
+                case 2 -> pickedArmor = game.armorHashMap.get(combatClass.armorsAllowed.get(1).name);
+                default -> System.out.println("Opção inválida");
+            }
+
 
             System.out.println(
                     "A noite se aproxima, a lua já surge no céu, estrelas vão se acendendo, " +
@@ -194,19 +230,24 @@ public class Game {
 
             System.out.println("Buscando uma injeção de ânimo, você se força a lembrar o que te trouxe até aqui.");
 
-            while (motivationType == null) {
-                System.out.println("Escolha sua motivação para invadir a caverna do inimigo e derrotá-lo:");
-                System.out.println("1. " + MotivationType.REVENGE.name);
-                System.out.println("2. " + MotivationType.GLORY.name);
-                option = in.nextInt();
-                switch (option) {
-                    case 1 -> motivationType = MotivationType.REVENGE;
-                    case 2 -> motivationType = MotivationType.GLORY;
-                    default -> System.out.println("Opção inválida");
-
-                }
+            // Motivation
+            optionsString = new String[MotivationType.values().length];
+            for (MotivationType motiv : MotivationType.values()) {
+                optionsString[motiv.ordinal()] = motiv.ordinal() + 1 + ". " + motiv.name;
+            }
+            option = optionsLoop(
+                    new int[]{1, 2},
+                    new String[]{"Escolha sua motivação para invadir a caverna do inimigo e derrotá-lo:"},
+                    optionsString
+            );
+            switch (option) {
+                case 1 -> motivationType = MotivationType.REVENGE;
+                case 2 -> motivationType = MotivationType.GLORY;
+                default -> System.out.println("Opção inválida");
             }
 
+
+            assert motivationType != null;
             if (motivationType.equals(MotivationType.REVENGE)) {
                 System.out.println(
                         "VINGANÇA: Imagens daquela noite trágica invadem sua mente. " +
@@ -229,7 +270,7 @@ public class Game {
 
                 );
             }
-            game.setTimeout(1000);
+
             player = new Player(
                     "Alex",
                     sexo,
@@ -275,7 +316,7 @@ public class Game {
                             "tocha, vindo de dentro de uma porta aberta."
             );
 
-
+            System.out.println();
             option = 0;
             while (option < 1 || option > 3) {
                 System.out.println(
@@ -297,9 +338,9 @@ public class Game {
                                         "Flechas voam da escotilha em sua direção, e você salta para dentro da sala, " +
                                         "porém uma delas te acerta na perna. "
                         );
-                        System.out.println("Vida antes da trap -> " + player.stats.getHealth());
+                        System.out.println("Vida antes da trap -> " + player.getHealth());
                         player.takeTurn(new TrapAction(), player);
-                        System.out.println("Vida depois da trap -> " + player.stats.getHealth());
+                        System.out.println("Vida depois da trap -> " + player.getHealth());
                     }
                     case 2 -> System.out.println(
                             " CORRENDO: Você respira fundo e desata a correr em direção à sala. Quando passa pela porta, " +
@@ -316,12 +357,12 @@ public class Game {
                 }
 
             }
-
+            System.out.println();
             System.out.println(
                     "Você se encontra sozinho em uma sala quadrada, contendo uma porta em cada parede. Uma delas foi aquela pela qual você entrou, que estava aberta, e as outras três estão fechadas. A porta à sua frente é a maior das quatro, com inscrições em seu entorno em uma língua que você não sabe ler, mas reconhece como sendo a língua antiga utilizada pelo inimigo. Você se aproxima da porta e percebe que ela está trancada por duas fechaduras douradas, e você entende que precisará primeiro derrotar o que estiver nas outras duas portas laterais, antes de conseguir enfrentar o líder. "
             );
             System.out.println("Você se dirige para a porta à direita.");
-
+            System.out.println();
             System.out.println("PORTA DIREITA: Você se aproxima, tentando ouvir o que acontece porta adentro, mas não escuta nada. Segura com mais força sua arma com uma mão, enquanto empurra a porta com a outra. Ao entrar, você se depara com uma sala espaçosa, com vários equipamentos de batalha pendurados nas paredes e dispostos em armários e mesas. Você imagina que este seja o arsenal do inimigo, onde estão guardados os equipamentos que seus soldados utilizam quando saem para espalhar o terror nas cidades e vilas da região. ");
 
             System.out.println(
@@ -331,7 +372,7 @@ public class Game {
             enemy = game.enemyHashMap.get("Armeiro");
 
 
-            game.setTimeout(1000);
+            System.out.println();
             Battle encounter = new Battle(player, enemy);
             endGame = encounter.reportEncounterResult();
             if (endGame) continue;
@@ -359,13 +400,13 @@ public class Game {
                     case 2 -> System.out.println("Você decide que não precisa utilizar nada que venha das mãos do inimigo.");
                     default -> System.out.println("Opção inválida");
                 }
-                System.out.println();
             }
+            System.out.println();
 
-            game.setTimeout(1000);
             System.out.println(
                     "Em uma mesa, você encontra uma chave dourada, e sabe que aquela chave abre uma das fechaduras da porta do líder inimigo. Você pega a chave e guarda numa pequena bolsa que leva presa ao cinto."
             );
+            System.out.println();
             System.out.println(
                     "PORTA ESQUERDA: Você retorna à sala anterior e se dirige à porta da esquerda. Você se aproxima, tentando ouvir o que acontece porta adentro, mas não escuta nada. Segura com mais força sua arma com uma mão, enquanto empurra a porta com a outra. Ao entrar, você se depara com uma sala parecida com a do arsenal, mas em vez de armaduras, existem vários potes e garrafas de vidro com conteúdos misteriosos e de cores diversas, e você entende que o capitão que vive ali, realiza experimentos com diversos ingredientes, criando poções utilizadas pelos soldados para aterrorizar a região." +
                             "No fundo da sala, olhando em sua direção, está outro dos capitães do inimigo. Um orque horrendo, de armadura, cajado em punho, em posição de combate. Ele avança em sua direção. ");
@@ -391,7 +432,7 @@ public class Game {
                                 "Você se sente revigorado para seguir adiante!"
                         );
                         player.setHealthToMax();
-                        System.out.println("Sua vida agora está em " + player.stats.getHealth());
+                        player.reportHealth();
                     }
                     case 2 -> System.out.println("Você fica receoso de beber algo produzido pelo inimigo");
                     default -> System.out.println("Opção inválida");
